@@ -6,6 +6,10 @@ spring:   # Root namespace for Spring Boot configuration //Google Cloud Consol--
           google:   # Name of the provider → "google"
             client-id: 18863193940-lpl7l6kgn8ldtuk81p3500ahhldu2v04.apps.googleusercontent.com   # Your real Client ID   # Your Google OAuth2 Client ID (from Google Cloud Console)
             client-secret: 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   # Your Google OAuth2 Client Secret (keep safe!)
+
+            #client-id: ${GOOGLE_CLIENT_ID}
+            #client-secret: ${GOOGLE_CLIENT_SECRET}
+
             scope: openid, profile, email   # What info you want from Google:
               # - openid → identity
               # - profile → basic user info (name, picture)
