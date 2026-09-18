@@ -71,10 +71,12 @@ public class AppUserRegisterDialog extends Dialog {
         TextField otpField = new TextField("Enter OTP");
         otpField.setPlaceholder("6-digit code");
         otpField.setWidthFull();
+        otpField.setVisible(false);
         //otpField.setVisible(false); // initially hidden
 
         // Create button with icon
         Button sendOtpBtn = new Button("Send Gmail OTP", VaadinIcon.PAPERPLANE.create());
+        sendOtpBtn.setVisible(false);
 
         // Style the button
         sendOtpBtn.getStyle()
@@ -146,18 +148,18 @@ public class AppUserRegisterDialog extends Dialog {
             }
 
 
-            String storedOtp = (String) VaadinSession
-                    .getCurrent()
-                    .getAttribute("otp");
-
-            String enteredOtp = otpField.getValue();
-
-            if (storedOtp == null ||
-                    !storedOtp.equals(enteredOtp)) {
-
-                Notification.show("OTP Verification failed!");
-                return;
-            }
+//            String storedOtp = (String) VaadinSession
+//                    .getCurrent()
+//                    .getAttribute("otp");
+//
+//            String enteredOtp = otpField.getValue();
+//
+//            if (storedOtp == null ||
+//                    !storedOtp.equals(enteredOtp)) {
+//
+//                Notification.show("OTP Verification failed!");
+//                return;
+//            }
 
             AppUserModel newUser = new AppUserModel();
             newUser.setUsername(username);
