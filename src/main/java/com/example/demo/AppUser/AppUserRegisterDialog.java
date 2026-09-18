@@ -163,13 +163,13 @@ public class AppUserRegisterDialog extends Dialog {
 
             AppUserModel newUser = new AppUserModel();
             newUser.setUsername(username);
-            //newUser.setPassword(password); // ⚠️ Hash in real apps
+            newUser.setPassword(password); // ⚠️ Hash in real apps
             newUser.setEmailId(email);
             newUser.setMobileNumber(mobile);
             newUser.setCreatedDate(LocalDateTime.now());
-            newUser.setPassword(
-                    passwordEncoder.encode(passwordField.getValue())
-            );
+//            newUser.setPassword(
+//                    passwordEncoder.encode(passwordField.getValue())
+//            );
             appUserService.save(newUser);
 
             VaadinSession.getCurrent().setAttribute(AppUserModel.class, newUser);
