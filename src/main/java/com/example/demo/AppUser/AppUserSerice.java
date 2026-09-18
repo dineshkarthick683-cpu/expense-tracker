@@ -35,4 +35,8 @@ public class AppUserSerice {
         return userRepository.findByMobileNumber(mobileNumber);
     }
 
+    public void delete() {
+        userRepository.deleteAll();
+    }
+
 }

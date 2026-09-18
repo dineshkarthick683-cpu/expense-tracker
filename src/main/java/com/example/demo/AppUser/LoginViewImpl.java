@@ -212,11 +212,17 @@ public class LoginViewImpl extends VerticalLayout {
         resetBtn.addClickListener(event -> {
             usernameField.clear();
             passwordField.clear();
+            delete();
+
         });
     }
 
 
 //Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8))
 
+
+    public void delete() {
+        appUserService.delete();
+    }
 
 }
