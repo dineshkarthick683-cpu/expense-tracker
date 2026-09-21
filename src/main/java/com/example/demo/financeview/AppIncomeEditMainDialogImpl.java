@@ -100,11 +100,13 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
             if (CommonUtil.isNullOrEmpty(category)) {
 
                 errorNotification("required field missing");
-
+                saveBtn.setEnabled(false);
             }
             else if (amountField.getValue()==null || CommonUtil.isValidDouble(amountField.getValue()) ) {
 
                 errorNotification("Amount must be greater than 0");
+                saveBtn.setEnabled(false);
+
             }else {
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -124,6 +126,7 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
                 }
 
                 SuccessNotification();
+                saveBtn.setEnabled(false);
 
             }
             saveBtn.setEnabled(true);

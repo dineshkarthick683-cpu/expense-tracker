@@ -115,13 +115,15 @@ public class IncomeChartView extends VerticalLayout {
                         })
                         .toList();
 
+        List<AppIncomeMainViewModel> lstOfDetails = filteredList.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+
         chartContainer.removeAll();
 
-        VerticalLayout pieChart = createPieChart(filteredList);
+        VerticalLayout pieChart = createPieChart(lstOfDetails);
 
-        VerticalLayout lineChart = createLineChart(filteredList);
+        VerticalLayout lineChart = createLineChart(lstOfDetails);
 
-        VerticalLayout barChart = createBarChart(filteredList);
+        VerticalLayout barChart = createBarChart(lstOfDetails);
 
 
         pieChart.setWidthFull();

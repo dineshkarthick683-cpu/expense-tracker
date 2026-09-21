@@ -106,11 +106,13 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
             if (CommonUtil.isNullOrEmpty(category)) {
 
                 errorNotification("required field missing");
+                saveBtn.setEnabled(true);
 
             }
             else if (amountField.getValue()==null || CommonUtil.isValidDouble(amountField.getValue()) ) {
 
                 errorNotification("Amount must be greater than 0");
+                saveBtn.setEnabled(true);
             }else {
 
 
@@ -125,10 +127,6 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
                                 + "          $0.$server.handleLocationError(err.message); });",
                         this // bind to this dialog instance
                 );
-
-
-
-
 
 
             }

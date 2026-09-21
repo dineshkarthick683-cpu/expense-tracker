@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -241,8 +242,10 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
 
 
     public List<String> getLastFiveTransactions() {
-        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        //List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
 
+        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         if (lstAllExpense == null || lstAllExpense.isEmpty()) {
             return Collections.emptyList();
         }
@@ -267,6 +270,8 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         double thisMonthSalary = incomeService.getAllIncome().stream()
                 // only Salary category
                 .filter(incomeObj -> "Salary".equalsIgnoreCase(incomeObj.getCategory()))
+
+                .filter(incomeObj -> incomeObj.getUsername().equals(user.getUsername()))
                 // only current month
                 .filter(incomeObj -> {
                     LocalDate date = incomeObj.getIncomeDate().toLocalDate();
@@ -314,7 +319,9 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
     public String populatedExpenseAmount(){
 
         double totalAmount = 0.0;
-        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        //List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         if(!lstAllExpense.isEmpty()){
 
              totalAmount = lstAllExpense.stream().filter(p->p.getAmount()!=null).mapToDouble(AppExpenseMainViewModel::getAmount).sum();
@@ -329,8 +336,9 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         double totalAmount = 0.0;
 
         // Get all expenses
-        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
-
+        //List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         if (!lstAllExpense.isEmpty()) {
             LocalDate today = LocalDate.now();
 
@@ -349,7 +357,9 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         double totalAmount = 0.0;
 
         // Get all expenses
-        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        //List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
 
         if (!lstAllExpense.isEmpty()) {
             LocalDate today = LocalDate.now();

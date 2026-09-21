@@ -90,14 +90,16 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
             if (CommonUtil.isNullOrEmpty(category)) {
 
                 errorNotification("required field missing");
+                saveBtn.setEnabled(true);
 
             }
             else if (amountField.getValue()==null || CommonUtil.isValidDouble(amountField.getValue()) ) {
 
                 errorNotification("Amount must be greater than 0");
+                saveBtn.setEnabled(true);
+
             }else {
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
                 AppIncomeMainViewModel incomeMainViewModel = new AppIncomeMainViewModel();
 
                 incomeMainViewModel.setCategory(category); // pass from image click
@@ -107,10 +109,8 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
                 incomeMainViewModel.setIncomeDate(incomeDate.getValue().atTime(LocalTime.now()));
 
                 incomeService.save(incomeMainViewModel);
-
                 SuccessNotification();
-
-
+                saveBtn.setEnabled(true);
 
             }
             saveBtn.setEnabled(true);

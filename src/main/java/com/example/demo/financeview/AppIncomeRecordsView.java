@@ -45,6 +45,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -65,6 +66,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.server.StreamResource;
@@ -435,7 +437,8 @@ public class AppIncomeRecordsView extends VerticalLayout {
                                                     .contains(searchText.toLowerCase()))
                             .toList();
 
-            grid.setItems(result);
+            List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+            grid.setItems(lstOfDetails);
             getSumOfAmountBasedOnGrid();
         });
 
@@ -445,8 +448,10 @@ public class AppIncomeRecordsView extends VerticalLayout {
 
     private void loadAllRecords() {
 
+
+        List<AppIncomeMainViewModel> lstOfDetails = incomeService.getAllIncome().stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         grid.setItems(
-                incomeService.getAllIncome());
+                lstOfDetails);
         getSumOfAmountBasedOnGrid();
 
     }
@@ -475,6 +480,7 @@ public class AppIncomeRecordsView extends VerticalLayout {
                         fromDateTime,
                         toDateTime);
 
+        List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         grid.setItems(result);
         getSumOfAmountBasedOnGrid();
 
@@ -594,14 +600,20 @@ public class AppIncomeRecordsView extends VerticalLayout {
 
             int y = 730;
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            Double totalAmount = expenseList.stream().map(AppIncomeMainViewModel::getAmount).filter(Objects::nonNull)
+                    .reduce(0.0, Double::sum);
+
             for (AppIncomeMainViewModel t : expenseList) {
 
                 content.newLineAtOffset(0, -20);
 
+                String formattedDate = t.getIncomeDate().format(formatter);
+
                 content.showText(
 
                         "ID : " + t.getId()
-                                + " | Date : " + t.getIncomeDate()
+                                + " | Date : " + formattedDate
                                 + " | Category : " + t.getCategory()
                                 + " | Expense Name : " + t.getRemarks()
                                 + " | Amount : " + t.getAmount());
@@ -612,6 +624,9 @@ public class AppIncomeRecordsView extends VerticalLayout {
                     break;
                 }
             }
+
+            content.newLineAtOffset(0, -30);
+            content.showText("Total Amount : " + totalAmount);
 
             content.endText();
 

@@ -458,7 +458,8 @@ public class AppExpenseRecordsView extends VerticalLayout {
                                                     .contains(searchText.toLowerCase()))
                             .toList();
 
-            grid.setItems(result);
+            List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+            grid.setItems(lstOfDetails);
 
 
             //result.stream().filter(p-> p.getExpenseName().startsWith("Salary")).forEach(System.out::println);
@@ -608,8 +609,10 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
     private void loadAllRecords() {
 
-        grid.setItems(
-                expenseService.getAllExpenses());
+        List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
+        List<AppExpenseMainViewModel> lstOfDetails = lstAllExpense.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+
+        grid.setItems(lstOfDetails);
         getSumOfAmountBasedOnGrid();
     }
 
@@ -637,7 +640,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
                         fromDateTime,
                         toDateTime);
 
-        grid.setItems(result);
+
+
+        List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+
+        grid.setItems(lstOfDetails);
         getSumOfAmountBasedOnGrid();
     }
 
@@ -774,14 +781,22 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
             int y = 730;
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+            Double totalAmount = expenseList.stream().map(AppExpenseMainViewModel::getAmount).filter(Objects::nonNull)
+                    .reduce(0.0, Double::sum);
             for (AppExpenseMainViewModel t : expenseList) {
 
                 content.newLineAtOffset(0, -20);
 
+                String formattedDate = t.getExpenseDate().format(formatter);
+
+
+
                 content.showText(
 
                         "ID : " + t.getId()
-                                + " | Date : " + t.getExpenseDate()
+                                + " | Date : " + formattedDate
                                 + " | Category : " + t.getCategory()
                                 + " | Expense Name : " + t.getExpenseName()
                                 + " | Amount : " + t.getAmount());
@@ -792,6 +807,9 @@ public class AppExpenseRecordsView extends VerticalLayout {
                     break;
                 }
             }
+
+            content.newLineAtOffset(0, -30);
+            content.showText("Total Amount : " + totalAmount);
 
             content.endText();
 

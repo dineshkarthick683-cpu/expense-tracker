@@ -2,6 +2,7 @@ package com.example.demo;
 import com.example.demo.AppUser.AppUserModel;
 import com.example.demo.AppUser.LoginViewImpl;
 import com.example.demo.financeview.AppIncomeMainViewImpl;
+import com.example.demo.financeview.AppIncomeMainViewModel;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -119,9 +120,11 @@ public class ExpenseChartView extends VerticalLayout {
 
         chartContainer.removeAll();
 
-        VerticalLayout pieChart = createPieChart(filteredList);
-        VerticalLayout lineChart = createLineChart(filteredList);
-        VerticalLayout barChart = createBarChart(filteredList);
+        List<AppExpenseMainViewModel> lstOfDetails = filteredList.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+
+        VerticalLayout pieChart = createPieChart(lstOfDetails);
+        VerticalLayout lineChart = createLineChart(lstOfDetails);
+        VerticalLayout barChart = createBarChart(lstOfDetails);
 
         pieChart.setWidthFull();
         barChart.setWidthFull();

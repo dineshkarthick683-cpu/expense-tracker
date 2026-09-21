@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Route("IncomeMain")
@@ -247,7 +248,10 @@ public class AppIncomeMainViewImpl extends VerticalLayout {
 
 
     public List<String> getLastFiveTransactions() {
-        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
+        //List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
+
+        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
 
         if (lstAllIncome == null || lstAllIncome.isEmpty()) {
             return Collections.emptyList();
@@ -306,7 +310,9 @@ public class AppIncomeMainViewImpl extends VerticalLayout {
     public String populatedIncomeAmount(){
 
         double totalAmount = 0.0;
-        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
+        //List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
+        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         if(!lstAllIncome.isEmpty()){
 
              totalAmount = lstAllIncome.stream().filter(p->p.getAmount()!=null && p.getCategory()!=null && p.getCategory().equalsIgnoreCase("Salary")).mapToDouble(AppIncomeMainViewModel::getAmount).sum();
@@ -321,13 +327,14 @@ public class AppIncomeMainViewImpl extends VerticalLayout {
         double totalAmount = 0.0;
 
         // Get all income
-        List<AppIncomeMainViewModel> lstAllEIncome = incomeService.getAllIncome();
+        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
 
-        if (!lstAllEIncome.isEmpty()) {
+        if (!lstAllIncome.isEmpty()) {
             LocalDate today = LocalDate.now();
 
             // Filter only today's Income and sum their amounts
-            totalAmount = lstAllEIncome.stream()
+            totalAmount = lstAllIncome.stream()
                     .filter(exp -> exp.getIncomeDate() != null && exp.getIncomeDate().toLocalDate().isEqual(today))
                     .filter(exp -> exp.getAmount() != null)
                     .filter(exp -> exp.getCategory() != null)
@@ -343,8 +350,9 @@ public class AppIncomeMainViewImpl extends VerticalLayout {
         double totalAmount = 0.0;
 
         // Get all Income
-        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
-
+        //List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome();
+        List<AppIncomeMainViewModel> lstAllIncome = incomeService.getAllIncome().stream().
+                filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
         if (!lstAllIncome.isEmpty()) {
             LocalDate today = LocalDate.now();
             int currentMonth = today.getMonthValue();
