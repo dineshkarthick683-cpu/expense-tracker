@@ -30,6 +30,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import com.vaadin.flow.server.VaadinSession;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -60,6 +65,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.stream.Collectors;
 
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.component.html.Anchor;
@@ -200,18 +206,36 @@ public class AppIncomeRecordsView extends VerticalLayout {
                 .set("color", "#2E7D32");
 
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
 
         // generate pdf into outputStream
 
-        StreamResource resource = new StreamResource(
-                "Expense_Report.pdf",
-                () -> new ByteArrayInputStream(outputStream.toByteArray()));
-        Anchor downloadPdf = new Anchor(resource, "Download PDF");
-        downloadPdf.getElement().setAttribute("download", true);
 
-        HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
-        downloadLayout.setWidthFull();
+
+        Button pdfButton = new Button("Export PDF");
+
+        HorizontalLayout downloadLayout =
+                new HorizontalLayout();
+
+        downloadLayout.add(pdfButton);
+
+        pdfButton.addClickListener(event -> {
+
+            List<AppIncomeMainViewModel> gridListData =
+                    grid.getListDataView()
+                            .getItems()
+                            .toList();
+
+            Anchor downloadPdf =
+                    createPdfDownload(gridListData);
+
+            downloadLayout.removeAll();
+
+            downloadLayout.add(downloadPdf);
+
+        });
+
+        add(downloadLayout);
 
         //Button downloadPdf = new Button(VaadinIcon.DOWNLOAD.create());
 
@@ -536,5 +560,87 @@ public class AppIncomeRecordsView extends VerticalLayout {
         }
     }
 
+    private Anchor createPdfDownload(List<AppIncomeMainViewModel> expenseList) {
+
+        try {
+
+            ByteArrayOutputStream outputStream =
+                    new ByteArrayOutputStream();
+
+            PDDocument document = new PDDocument();
+
+            PDPage page = new PDPage();
+
+            document.addPage(page);
+
+            PDPageContentStream content =
+                    new PDPageContentStream(document, page);
+
+            content.beginText();
+
+            content.setFont(
+                    new PDType1Font(
+                            Standard14Fonts.FontName.HELVETICA_BOLD),
+                    14);
+
+            content.newLineAtOffset(50, 750);
+
+            content.showText("Expense Report");
+
+            content.setFont(
+                    new PDType1Font(
+                            Standard14Fonts.FontName.HELVETICA),
+                    10);
+
+            int y = 730;
+
+            for (AppIncomeMainViewModel t : expenseList) {
+
+                content.newLineAtOffset(0, -20);
+
+                content.showText(
+
+                        "ID : " + t.getId()
+                                + " | Date : " + t.getIncomeDate()
+                                + " | Category : " + t.getCategory()
+                                + " | Expense Name : " + t.getRemarks()
+                                + " | Amount : " + t.getAmount());
+
+                y -= 20;
+
+                if (y < 50) {
+                    break;
+                }
+            }
+
+            content.endText();
+
+            content.close();
+
+            document.save(outputStream);
+
+            document.close();
+
+            StreamResource resource =
+                    new StreamResource(
+                            "Expense_Report.pdf",
+                            () -> new ByteArrayInputStream(
+                                    outputStream.toByteArray()));
+
+            Anchor downloadPdf =
+                    new Anchor(resource, "Download PDF");
+
+            downloadPdf.getElement()
+                    .setAttribute("download", true);
+
+            return downloadPdf;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new Anchor();
+        }
+    }
 
 }

@@ -28,6 +28,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -266,15 +271,36 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
         // generate pdf into outputStream
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        StreamResource resource = new StreamResource(
-                "Expense_Report.pdf",
-                () -> new ByteArrayInputStream(outputStream.toByteArray()));
-        Anchor downloadPdf = new Anchor(resource, "Download PDF");
-        downloadPdf.getElement().setAttribute("download", true);
 
-        HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
-        downloadLayout.setWidthFull();
+
+
+        Button pdfButton = new Button("Export PDF");
+
+        HorizontalLayout downloadLayout =
+                new HorizontalLayout();
+
+        downloadLayout.add(pdfButton);
+
+        pdfButton.addClickListener(event -> {
+
+            List<AppExpenseMainViewModel> gridListData =
+                    grid.getListDataView()
+                            .getItems()
+                            .toList();
+
+            Anchor downloadPdf =
+                    createPdfDownload(gridListData);
+
+            downloadLayout.removeAll();
+
+            downloadLayout.add(downloadPdf);
+
+        });
+
+        add(downloadLayout);
+
+
+
 
         HorizontalLayout footer =
                 new HorizontalLayout(backButton, downloadLayout, totalLabel);
@@ -443,12 +469,12 @@ public class AppExpenseRecordsView extends VerticalLayout {
 //            Function<String,Integer> length = str -> str.length();
 //            length.apply(chartAtValue);
 
-            List<Integer> number = Arrays.asList(1, 2, 3, 4, 5, 6);
+            //List<Integer> number = Arrays.asList(1, 2, 3, 4, 5, 6);
 
             //number.stream().filter(p-> p % 2==0).map(n->n*n).forEach(System.out::println);
 
 
-            HashSet<Integer> uniqe = new HashSet<Integer>();
+            //HashSet<Integer> uniqe = new HashSet<Integer>();
 
             //number.stream().distinct().forEach(System.out::println);
 
@@ -456,7 +482,7 @@ public class AppExpenseRecordsView extends VerticalLayout {
             //umber.stream().filter(p-> !uniqe.add(p));
 
             //Map<Character,Long> result =
-            String test = "java developer";
+            //String test = "java developer";
 
             //Map<Character, Long> resultSet = test.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
@@ -711,6 +737,91 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
         } catch (IOException ex) {
             Notification.show("Error creating image: " + ex.getMessage());
+        }
+    }
+
+    private Anchor createPdfDownload(List<AppExpenseMainViewModel> expenseList) {
+
+        try {
+
+            ByteArrayOutputStream outputStream =
+                    new ByteArrayOutputStream();
+
+            PDDocument document = new PDDocument();
+
+            PDPage page = new PDPage();
+
+            document.addPage(page);
+
+            PDPageContentStream content =
+                    new PDPageContentStream(document, page);
+
+            content.beginText();
+
+            content.setFont(
+                    new PDType1Font(
+                            Standard14Fonts.FontName.HELVETICA_BOLD),
+                    14);
+
+            content.newLineAtOffset(50, 750);
+
+            content.showText("Expense Report");
+
+            content.setFont(
+                    new PDType1Font(
+                            Standard14Fonts.FontName.HELVETICA),
+                    10);
+
+            int y = 730;
+
+            for (AppExpenseMainViewModel t : expenseList) {
+
+                content.newLineAtOffset(0, -20);
+
+                content.showText(
+
+                        "ID : " + t.getId()
+                                + " | Date : " + t.getExpenseDate()
+                                + " | Category : " + t.getCategory()
+                                + " | Expense Name : " + t.getExpenseName()
+                                + " | Amount : " + t.getAmount());
+
+                y -= 20;
+
+                if (y < 50) {
+                    break;
+                }
+            }
+
+            content.endText();
+
+            content.close();
+
+            document.save(outputStream);
+
+            document.close();
+
+            StreamResource resource =
+                    new StreamResource(
+                            "Expense_Report.pdf",
+                            () -> new ByteArrayInputStream(
+                                    outputStream.toByteArray()));
+
+            Anchor downloadPdf =
+                    new Anchor(resource, "Download PDF");
+
+            downloadPdf.getElement()
+                    .setAttribute("download", true);
+
+            System.out.println("Successfully created");
+
+            return downloadPdf;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new Anchor();
         }
     }
 

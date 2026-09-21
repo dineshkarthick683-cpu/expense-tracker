@@ -36,10 +36,6 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
 
     private DatePicker incomeDate;
 
-    @Autowired
-    private ExpenseProducer producer;
-
-
     public AppIncomeAddMainDialogImpl(String category, IncomeService incomeService, CommonUtil commonUtil) {
 
         this.category = category;
