@@ -48,6 +48,9 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
     NumberField amountField = new NumberField();
     private String currentLocation;
 
+    @Autowired
+    private ExpenseProducer producer;
+
     AppUserModel user = VaadinSession.getCurrent().getAttribute(AppUserModel.class);
 
     public AppExpenseAddMainDialogImpl(String category,ExpenseService expenseService,CommonUtil commonUtil) {
@@ -98,8 +101,10 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
             saveBtn.setEnabled(false);
             if (CommonUtil.isNullOrEmpty(category)) {
                 errorNotification("required field missing");
+                saveBtn.setEnabled(true);
             } else if (amountField.getValue()==null || CommonUtil.isValidDouble(amountField.getValue())) {
                 errorNotification("Amount must be greater than 0");
+                saveBtn.setEnabled(true);
             } else {
                 // 👉 Trigger point: Save button click
                 UI.getCurrent().getPage().executeJs(
@@ -110,6 +115,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                                 + "          $0.$server.handleLocationError(err.message); });",
                         this // bind to this dialog instance
                 );
+                saveBtn.setEnabled(true);
             }
             saveBtn.setEnabled(true);
         });
@@ -199,6 +205,14 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
 
         expenseService.save(expenseMainViewModel);
         SuccessNotification();
+
+
+        ExpenseEvent event = new ExpenseEvent(
+                expenseMainViewModel.getId(),
+                expenseMainViewModel.getCategory(),
+                expenseMainViewModel.getAmount());
+        producer.publishExpense(event);
+
         close();
     }
 

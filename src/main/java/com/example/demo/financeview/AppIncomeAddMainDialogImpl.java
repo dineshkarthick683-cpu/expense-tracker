@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -35,6 +36,8 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
 
     private DatePicker incomeDate;
 
+    @Autowired
+    private ExpenseProducer producer;
 
 
     public AppIncomeAddMainDialogImpl(String category, IncomeService incomeService, CommonUtil commonUtil) {
@@ -110,6 +113,8 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
                 incomeService.save(incomeMainViewModel);
 
                 SuccessNotification();
+
+
 
             }
             saveBtn.setEnabled(true);

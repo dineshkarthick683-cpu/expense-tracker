@@ -7,7 +7,7 @@ import com.example.demo.AppUser.LoginViewImpl;
 import com.example.demo.CommonUtil;
 import com.example.demo.financeview.AppIncomeMainViewModel;
 import com.example.demo.financeview.IncomeService;
-import com.itextpdf.text.Anchor;
+import com.vaadin.flow.component.html.Anchor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -28,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +58,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
+import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 @Route("incomerecords")
 @PageTitle("Records")
@@ -192,56 +199,70 @@ public class AppIncomeRecordsView extends VerticalLayout {
                 .set("font-weight", "600")
                 .set("color", "#2E7D32");
 
-        Button downloadPdf = new Button(VaadinIcon.DOWNLOAD.create());
 
-        downloadPdf.addClickListener(e -> {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-            try {
+        // generate pdf into outputStream
 
-                String fileName = System.getProperty("user.home")
-                        + "/Downloads/IncomeRecords.pdf";
-
-                Document document = new Document();
-
-                PdfWriter.getInstance(document, new FileOutputStream(fileName));
-
-                document.open();
-                document.add(new Paragraph("Income Records"));
-                document.add(new Paragraph(" "));
-
-                PdfPTable table = new PdfPTable(5);
-
-                table.addCell("ID");
-                table.addCell("Date");
-                table.addCell("Category");
-                table.addCell("Income Name");
-                table.addCell("Amount");
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                for (AppIncomeMainViewModel item : grid.getListDataView().getItems().toList()) {
-
-                    table.addCell(String.valueOf(item.getId()));
-                    table.addCell(item.getIncomeDate().format(formatter));
-                    table.addCell(item.getCategory());
-                    table.addCell(item.getRemarks());
-                    table.addCell(String.valueOf(item.getAmount()));
-                }
-
-                document.add(table);
-                document.close();
-
-                Notification.show("PDF Created");
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Notification.show(ex.getMessage());
-            }
-
-        });
-
+        StreamResource resource = new StreamResource(
+                "Expense_Report.pdf",
+                () -> new ByteArrayInputStream(outputStream.toByteArray()));
+        Anchor downloadPdf = new Anchor(resource, "Download PDF");
+        downloadPdf.getElement().setAttribute("download", true);
 
         HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
         downloadLayout.setWidthFull();
+
+        //Button downloadPdf = new Button(VaadinIcon.DOWNLOAD.create());
+
+//        downloadPdf.addClickListener(e -> {
+//
+//            try {
+//
+//                String fileName = System.getProperty("user.home")
+//                        + "/Downloads/IncomeRecords.pdf";
+//
+//                Document document = new Document();
+//
+//                PdfWriter.getInstance(document, new FileOutputStream(fileName));
+//
+//                document.open();
+//                document.add(new Paragraph("Income Records"));
+//                document.add(new Paragraph(" "));
+//
+//                PdfPTable table = new PdfPTable(5);
+//
+//                table.addCell("ID");
+//                table.addCell("Date");
+//                table.addCell("Category");
+//                table.addCell("Income Name");
+//                table.addCell("Amount");
+//
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+//                for (AppIncomeMainViewModel item : grid.getListDataView().getItems().toList()) {
+//
+//                    table.addCell(String.valueOf(item.getId()));
+//                    table.addCell(item.getIncomeDate().format(formatter));
+//                    table.addCell(item.getCategory());
+//                    table.addCell(item.getRemarks());
+//                    table.addCell(String.valueOf(item.getAmount()));
+//                }
+//
+//                document.add(table);
+//                document.close();
+//
+//                Notification.show("PDF Created");
+//
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//                Notification.show(ex.getMessage());
+//            }
+//
+//        });
+
+
+//        HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
+//        downloadLayout.setWidthFull();
 
         HorizontalLayout footer =
                 new HorizontalLayout(backButton, downloadLayout, totalLabel);

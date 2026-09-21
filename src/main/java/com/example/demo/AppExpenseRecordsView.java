@@ -26,6 +26,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,16 +34,19 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Route("records")
 @PageTitle("Records")
@@ -209,53 +213,65 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
 
 
-        Button downloadPdf = new Button(VaadinIcon.DOWNLOAD.create());
+//        Button downloadPdf = new Button(VaadinIcon.DOWNLOAD.create());
+//
+//        downloadPdf.addClickListener(e -> {
+//
+//            try {
+//
+//                String fileName = System.getProperty("user.home")
+//                        + "/Downloads/IncomeRecords.pdf";
+//
+//                Document document = new Document();
+//
+//                PdfWriter.getInstance(document, new FileOutputStream(fileName));
+//
+//                document.open();
+//                document.add(new Paragraph("Income Records"));
+//                document.add(new Paragraph(" "));
+//
+//                PdfPTable table = new PdfPTable(5);
+//
+//                table.addCell("ID");
+//                table.addCell("Date");
+//                table.addCell("Category");
+//                table.addCell("Income Name");
+//                table.addCell("Amount");
+//
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+//                for (AppExpenseMainViewModel item : grid.getListDataView().getItems().toList()) {
+//
+//                    table.addCell(String.valueOf(item.getId()));
+//                    table.addCell(item.getExpenseDate().format(formatter));
+//                    table.addCell(item.getCategory());
+//                    table.addCell(item.getExpenseName());
+//                    table.addCell(String.valueOf(item.getAmount()));
+//                }
+//
+//                document.add(table);
+//                document.close();
+//
+//                Notification.show("PDF Created");
+//
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//                Notification.show(ex.getMessage());
+//            }
+//
+//        });
+//
+//
+//        HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
+//        downloadLayout.setWidthFull();
 
-        downloadPdf.addClickListener(e -> {
+        // generate pdf into outputStream
 
-            try {
-
-                String fileName = System.getProperty("user.home")
-                        + "/Downloads/IncomeRecords.pdf";
-
-                Document document = new Document();
-
-                PdfWriter.getInstance(document, new FileOutputStream(fileName));
-
-                document.open();
-                document.add(new Paragraph("Income Records"));
-                document.add(new Paragraph(" "));
-
-                PdfPTable table = new PdfPTable(5);
-
-                table.addCell("ID");
-                table.addCell("Date");
-                table.addCell("Category");
-                table.addCell("Income Name");
-                table.addCell("Amount");
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                for (AppExpenseMainViewModel item : grid.getListDataView().getItems().toList()) {
-
-                    table.addCell(String.valueOf(item.getId()));
-                    table.addCell(item.getExpenseDate().format(formatter));
-                    table.addCell(item.getCategory());
-                    table.addCell(item.getExpenseName());
-                    table.addCell(String.valueOf(item.getAmount()));
-                }
-
-                document.add(table);
-                document.close();
-
-                Notification.show("PDF Created");
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Notification.show(ex.getMessage());
-            }
-
-        });
-
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        StreamResource resource = new StreamResource(
+                "Expense_Report.pdf",
+                () -> new ByteArrayInputStream(outputStream.toByteArray()));
+        Anchor downloadPdf = new Anchor(resource, "Download PDF");
+        downloadPdf.getElement().setAttribute("download", true);
 
         HorizontalLayout downloadLayout = new HorizontalLayout(downloadPdf);
         downloadLayout.setWidthFull();
@@ -417,6 +433,134 @@ public class AppExpenseRecordsView extends VerticalLayout {
                             .toList();
 
             grid.setItems(result);
+
+
+            //result.stream().filter(p-> p.getExpenseName().startsWith("Salary")).forEach(System.out::println);
+
+            //Predicate<Integer> predicate = n -> n%2 ==0;
+
+//            String chartAtValue = "";
+//            Function<String,Integer> length = str -> str.length();
+//            length.apply(chartAtValue);
+
+            List<Integer> number = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+            //number.stream().filter(p-> p % 2==0).map(n->n*n).forEach(System.out::println);
+
+
+            HashSet<Integer> uniqe = new HashSet<Integer>();
+
+            //number.stream().distinct().forEach(System.out::println);
+
+            //remove duplicate;
+            //umber.stream().filter(p-> !uniqe.add(p));
+
+            //Map<Character,Long> result =
+            String test = "java developer";
+
+            //Map<Character, Long> resultSet = test.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            //new StringBuilder(test).reverse().toString();
+
+//            LinkedHashMap<Character, Long> resultSet = test.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+//            Character finalresult = resultSet.entrySet().stream().filter(p -> p.getValue() == 1).map(Map.Entry::getKey).findFirst().orElse(null);
+
+
+             //List<Integer> listNumber = Arrays.asList(1,3,4,5);
+
+             //listNumber.stream().distinct().sorted(Comparator.reverseOrder()).skip(1).findFirst().get();
+
+            // Map<Boolean,List<Integer>> lstElements = listNumber.stream().collect(Collectors.partitioningBy(n-> n%2==0));
+
+            //lstElements.entrySet().stream().filter(p -> p.getKey()).forEach(System.out::println);
+
+            //boolean ispolindrome = test.equals(new StringBuilder(test).reverse().toString());
+
+
+            //find seq missing number
+            //int[] arr = {1,2,3,5};
+
+            //int  n = 5;
+
+            //int expected = n * (n+1)/2;
+
+            //Arrays.stream(arr).sum();
+
+            //List<Integer> lstList = Arrays.stream(arr).boxed().collect(Collectors.toList());
+
+            //IntStream.rangeClosed(1,n).filter(p-> !lstList.contains(p));
+
+
+           // String words = "java spring java sql spring";
+
+           // Arrays.stream(words.split("\\ ")).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+
+            //find large number
+//            int[] intArray = {2, 9, 29, 23, 29};
+//
+//            int largeNumber =  intArray[0];
+//
+//            for(int i=0;i<intArray.length;i++){
+//
+//                if(intArray[i]>largeNumber){
+//
+//                    largeNumber =  intArray[i];
+//                }
+//            }
+
+
+
+            // find second largest number
+
+//            int fisrtLargeNumber = Integer.MIN_VALUE;
+//            int secondLargeNumber = Integer.MIN_VALUE;
+//
+//            int n = 29;
+//
+//            int expSum = n * (n+1)/2;
+//
+//            int actualSum = 0;
+//
+//            for(int num: intArray){
+//
+//                if(num > fisrtLargeNumber){  // 2 > -0099 , 9 > 2 , 29 > 9 , 23  > 29
+//
+//                    secondLargeNumber = fisrtLargeNumber; // -0099 = -0099 , 2 , 9
+//
+//                    fisrtLargeNumber = num; // 2 , 9 , 29
+//
+//                }else if(num > secondLargeNumber && num!=fisrtLargeNumber){
+//                    secondLargeNumber = num;
+//                }
+//
+//            }
+
+//            int[] arr = {1, 2, 3, 2, 1, 2, 4};
+//
+//            for (int i = 0; i < arr.length; i++) {
+//                int count = 1;
+//
+//                for (int j = i + 1; j < arr.length; j++) {
+//                    if (arr[i] == arr[j]) {
+//                        count++;
+//                    }
+//                }
+//
+//                boolean alreadyCounted = false;
+//
+//                for (int k = 0; k < i; k++) {
+//                    if (arr[k] == arr[i]) {
+//                        alreadyCounted = true;
+//                        break;
+//                    }
+//                }
+//
+//                if (!alreadyCounted) {
+//                    System.out.println(arr[i] + " occurs " + count + " times");
+//                }
+//            }
+
+
             getSumOfAmountBasedOnGrid();
         });
 
