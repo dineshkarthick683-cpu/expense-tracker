@@ -96,10 +96,27 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         Button cancelBtn = new Button("Cancel",
                 VaadinIcon.CLOSE.create());
 
+        Button locationBtn = new Button("",
+                VaadinIcon.LOCATION_ARROW.create());
+
         setBtnComponentStyle(saveBtn);
         setBtnComponentStyle(resetBtn);
         setBtnComponentStyle(cancelBtn);
+        setBtnComponentStyle(locationBtn);
 
+
+        locationBtn.addClickListener(event -> {
+
+            // 👉 Trigger point: Save button click
+            UI.getCurrent().getPage().executeJs(
+                    "navigator.geolocation.getCurrentPosition("
+                            + "pos => { console.log('Got coords', pos); "
+                            + "          $0.$server.saveExpenseWithLocation(pos.coords.latitude, pos.coords.longitude); }, "
+                            + "err => { console.error(err); "
+                            + "          $0.$server.handleLocationError(err.message); });",
+                    this // bind to this dialog instance
+            );
+        });
 
         saveBtn.addClickListener(event -> {
             saveBtn.setEnabled(false);
@@ -110,16 +127,30 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                 errorNotification("Amount must be greater than 0");
                 saveBtn.setEnabled(true);
             } else {
-                // 👉 Trigger point: Save button click
-                UI.getCurrent().getPage().executeJs(
-                        "navigator.geolocation.getCurrentPosition("
-                                + "pos => { console.log('Got coords', pos); "
-                                + "          $0.$server.saveExpenseWithLocation(pos.coords.latitude, pos.coords.longitude); }, "
-                                + "err => { console.error(err); "
-                                + "          $0.$server.handleLocationError(err.message); });",
-                        this // bind to this dialog instance
-                );
-                saveBtn.setEnabled(true);
+                // Save expense with location
+
+                if(currentLocation!=null) {
+                    AppExpenseMainViewModel expenseMainViewModelSave = new AppExpenseMainViewModel();
+                    expenseMainViewModelSave.setCategory(category);
+                    expenseMainViewModelSave.setExpenseName(remarksField.getValue());
+                    expenseMainViewModelSave.setAmount(amountField.getValue());
+                    expenseMainViewModelSave.setUsername(user.getUsername());
+                    expenseMainViewModelSave.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
+                    expenseMainViewModelSave.setLocation(currentLocation);
+                    expenseService.save(expenseMainViewModelSave);
+                    SuccessNotification();
+                    ExpenseEvent producerEvent = new ExpenseEvent(
+                            expenseMainViewModelSave.getId(),
+                            expenseMainViewModelSave.getCategory(),
+                            expenseMainViewModelSave.getAmount());
+                    producer.publishExpense(producerEvent);
+                    saveBtn.setEnabled(true);
+                    close();
+                }else{
+                    errorNotification("please on the location to save expense");
+                    saveBtn.setEnabled(true);
+                }
+
             }
             saveBtn.setEnabled(true);
         });
@@ -159,7 +190,8 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                 new VerticalLayout(
                         remarksField,
                         amountField,
-                        expenseDate);
+                        expenseDate,
+                        locationBtn);
 
         fieldsLayout.setSpacing(true);
         fieldsLayout.setPadding(true);
@@ -211,28 +243,6 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         String location = getAddress(lat, lon); // reverse‑geocode
         this.currentLocation = location;
         Notification.show("Location captured: " + location);
-
-        // Save expense with location
-
-        AppExpenseMainViewModel expenseMainViewModel = new AppExpenseMainViewModel();
-        expenseMainViewModel.setCategory(category);
-        expenseMainViewModel.setExpenseName(remarksField.getValue());
-        expenseMainViewModel.setAmount(amountField.getValue());
-        expenseMainViewModel.setUsername(user.getUsername());
-        expenseMainViewModel.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
-        expenseMainViewModel.setLocation(location);
-
-        expenseService.save(expenseMainViewModel);
-        SuccessNotification();
-
-
-        ExpenseEvent event = new ExpenseEvent(
-                expenseMainViewModel.getId(),
-                expenseMainViewModel.getCategory(),
-                expenseMainViewModel.getAmount());
-        producer.publishExpense(event);
-
-        close();
     }
 
     @ClientCallable

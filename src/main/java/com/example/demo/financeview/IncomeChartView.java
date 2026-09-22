@@ -129,8 +129,9 @@ public class IncomeChartView extends VerticalLayout {
         pieChart.setWidthFull();
         barChart.setWidthFull();
         lineChart.setWidthFull();
-//        pieChart.setWidth("50%");
-//        barChart.setWidth("50%");
+
+        pieChart.setWidth("100%");
+        //barChart.setWidth("100%");
 
         VerticalLayout topRow =
                 new VerticalLayout(pieChart, barChart,lineChart);
@@ -201,7 +202,7 @@ public class IncomeChartView extends VerticalLayout {
         pie.getStyle()
                 //.set("width", "300px")
                 .set("height", "200px")
-                .set("width", "200px")
+                //.set("width", "200px")
                 .set("border-radius", "50%")
                 .set("background",
                         "conic-gradient(" + gradient + ")");

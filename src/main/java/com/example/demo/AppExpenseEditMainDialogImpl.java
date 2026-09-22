@@ -92,11 +92,28 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
         Button cancelBtn = new Button("Cancel",
                 VaadinIcon.CLOSE.create());
 
+        Button locationBtn = new Button("",
+                VaadinIcon.LOCATION_ARROW.create());
+
         setBtnComponentStyle(saveBtn);
         setBtnComponentStyle(resetBtn);
         setBtnComponentStyle(cancelBtn);
 
+        setBtnComponentStyle(locationBtn);
 
+
+        locationBtn.addClickListener(event -> {
+
+            // 👉 Trigger point: Save button click
+            UI.getCurrent().getPage().executeJs(
+                    "navigator.geolocation.getCurrentPosition("
+                            + "pos => { console.log('Got coords', pos); "
+                            + "          $0.$server.saveExpenseWithLocation(pos.coords.latitude, pos.coords.longitude); }, "
+                            + "err => { console.error(err); "
+                            + "          $0.$server.handleLocationError(err.message); });",
+                    this // bind to this dialog instance
+            );
+        });
 
         //set Obj value
         remarksField.setValue(expenseMainViewModel.getExpenseName());
@@ -121,17 +138,31 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
             }else {
 
 
-                //AppExpenseMainViewModel expenseMainViewModel = new AppExpenseMainViewModel();
+                if(currentLocation!=null) {
+                    AppExpenseMainViewModel expenseMainViewModelSave = new AppExpenseMainViewModel();
+                    // Save expense with location
+                    expenseMainViewModelSave.setCategory(expenseMainViewModel.getCategory()); // pass from image click
+                    expenseMainViewModelSave.setExpenseName(remarksField.getValue());
+                    expenseMainViewModelSave.setAmount(amountField.getValue());
+                    expenseMainViewModelSave.setUsername(user.getUsername());
+                    expenseMainViewModelSave.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
+                    expenseMainViewModelSave.setLocation(currentLocation);
 
-                // 👉 Trigger point: Save button click
-                UI.getCurrent().getPage().executeJs(
-                        "navigator.geolocation.getCurrentPosition("
-                                + "pos => { console.log('Got coords', pos); "
-                                + "          $0.$server.saveExpenseWithLocation(pos.coords.latitude, pos.coords.longitude); }, "
-                                + "err => { console.error(err); "
-                                + "          $0.$server.handleLocationError(err.message); });",
-                        this // bind to this dialog instance
-                );
+                    expenseService.save(expenseMainViewModelSave);
+
+                    // 👉 Call the callback after save
+                    if (onSaveCallback != null) {
+                        onSaveCallback.run();
+                    }
+
+                    SuccessNotification();
+                    saveBtn.setEnabled(true);
+                    close();
+
+                }else{
+                    errorNotification("please on the location to update expense");
+                    saveBtn.setEnabled(true);
+                }
 
 
             }
@@ -172,7 +203,8 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
                 new VerticalLayout(
                         remarksField,
                         amountField,
-                        expenseDate);
+                        expenseDate,
+                        locationBtn);
 
         fieldsLayout.setSpacing(true);
         fieldsLayout.setPadding(true);
@@ -224,24 +256,6 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
         String location = getAddress(lat, lon); // reverse‑geocode
         this.currentLocation = location;
         Notification.show("Location captured: " + location);
-
-        // Save expense with location
-        expenseMainViewModel.setCategory(expenseMainViewModel.getCategory()); // pass from image click
-        expenseMainViewModel.setExpenseName(remarksField.getValue());
-        expenseMainViewModel.setAmount(amountField.getValue());
-        expenseMainViewModel.setUsername(user.getUsername());
-        expenseMainViewModel.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
-        expenseMainViewModel.setLocation(location);
-
-        expenseService.save(expenseMainViewModel);
-
-        // 👉 Call the callback after save
-        if (onSaveCallback != null) {
-            onSaveCallback.run();
-        }
-
-        SuccessNotification();
-        close();
     }
 
     @ClientCallable
