@@ -87,7 +87,9 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
         Button cancelBtn = new Button("Cancel",
                 VaadinIcon.CLOSE.create());
 
-
+        setBtnComponentStyle(saveBtn);
+        setBtnComponentStyle(resetBtn);
+        setBtnComponentStyle(cancelBtn);
 
         //set Obj value
         remarksField.setValue(incomeMainViewModel.getRemarks());
@@ -194,5 +196,15 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
         notification.setDuration(3000);
 
         notification.open();
+    }
+
+    public void setBtnComponentStyle(Button btnCommon){
+        btnCommon.getStyle().set("border-radius", "8px"); // square with rounded corners
+        btnCommon.getStyle().set("box-shadow", "0 4px 10px rgba(0,0,0,0.2)");
+        btnCommon.getStyle().set("background-color", "#FFD700"); // golden color
+        btnCommon.getStyle().set("color", "black");
+        btnCommon.getStyle().set("flex-direction", "column"); // icon above text
+        btnCommon.getStyle().set("align-items", "center");
+        btnCommon.getStyle().set("justify-content", "center");
     }
 }
