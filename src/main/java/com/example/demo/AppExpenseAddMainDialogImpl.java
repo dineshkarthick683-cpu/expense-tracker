@@ -99,6 +99,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         Button locationBtn = new Button("On Location",
                 VaadinIcon.LOCATION_ARROW.create());
 
+        locationBtn.setWidthFull();
         setBtnComponentStyle(saveBtn);
         setBtnComponentStyle(resetBtn);
         setBtnComponentStyle(cancelBtn);
@@ -139,13 +140,14 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                     expenseMainViewModelSave.setLocation(currentLocation);
                     expenseService.save(expenseMainViewModelSave);
                     SuccessNotification();
+                    saveBtn.setEnabled(true);
+                    close();
                     ExpenseEvent producerEvent = new ExpenseEvent(
                             expenseMainViewModelSave.getId(),
                             expenseMainViewModelSave.getCategory(),
                             expenseMainViewModelSave.getAmount());
                     producer.publishExpense(producerEvent);
-                    saveBtn.setEnabled(true);
-                    close();
+
                 }else{
                     errorNotification("please on the location to save expense");
                     saveBtn.setEnabled(true);

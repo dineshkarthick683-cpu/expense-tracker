@@ -126,7 +126,7 @@ public class ExpenseChartView extends VerticalLayout {
         VerticalLayout lineChart = createLineChart(lstOfDetails);
         VerticalLayout barChart = createBarChart(lstOfDetails);
 
-        pieChart.setWidthFull();
+        //pieChart.setWidthFull();
         barChart.setWidthFull();
         lineChart.setWidthFull();
         //pieChart.setWidth("100%");
@@ -202,7 +202,7 @@ public class ExpenseChartView extends VerticalLayout {
                 .set("border-radius", "50%")
                 .set("background",
                         "conic-gradient(" + gradient + ")");
-        pie.setWidthFull();
+        //pie.setWidthFull();
 
         VerticalLayout legend = new VerticalLayout();
         legend.setSpacing(false);

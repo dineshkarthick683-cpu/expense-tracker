@@ -95,6 +95,8 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
         Button locationBtn = new Button("On Location",
                 VaadinIcon.LOCATION_ARROW.create());
 
+        locationBtn.setWidthFull();
+
         setBtnComponentStyle(saveBtn);
         setBtnComponentStyle(resetBtn);
         setBtnComponentStyle(cancelBtn);

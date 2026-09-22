@@ -126,7 +126,7 @@ public class IncomeChartView extends VerticalLayout {
         VerticalLayout barChart = createBarChart(lstOfDetails);
 
 
-        pieChart.setWidthFull();
+        //pieChart.setWidthFull();
         barChart.setWidthFull();
         lineChart.setWidthFull();
 
@@ -206,7 +206,7 @@ public class IncomeChartView extends VerticalLayout {
                 .set("border-radius", "50%")
                 .set("background",
                         "conic-gradient(" + gradient + ")");
-        pie.setWidthFull();
+        //pie.setWidthFull();
 
         VerticalLayout legend =
                 new VerticalLayout();
