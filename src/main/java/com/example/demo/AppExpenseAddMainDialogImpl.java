@@ -96,7 +96,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         Button cancelBtn = new Button("Cancel",
                 VaadinIcon.CLOSE.create());
 
-        Button locationBtn = new Button("",
+        Button locationBtn = new Button("On Location",
                 VaadinIcon.LOCATION_ARROW.create());
 
         setBtnComponentStyle(saveBtn);
