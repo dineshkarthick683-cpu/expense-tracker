@@ -405,18 +405,18 @@ public class AppIncomeMainViewImpl extends VerticalLayout {
                 .set("margin", "10px");
 
         username = new Span("👤 User: " + user.getUsername());
-        username.getStyle().set("font-size", "18px").set("font-weight", "600");
+        username.getStyle().set("font-size", "15px").set("font-weight", "600");
 
         todayIncome = new Span("📉 Today Income: ₹" + populatedTodayEIncomeAmount());
-        todayIncome.getStyle().set("font-size", "15px").set("color", "green").set("font-weight", "700");
+        todayIncome.getStyle().set("font-size", "15px").set("color", "green").set("font-weight", "600");
 
         MonthIncome = new Span("📉 Month Income: ₹" + populatedMonthlyIncomeAmount());
-        MonthIncome.getStyle().set("font-size", "15px").set("color", "green").set("font-weight", "700");
+        MonthIncome.getStyle().set("font-size", "15px").set("color", "green").set("font-weight", "600");
 
         title = new Span("🕒 Recent Txns");
         title.getStyle()
                 .set("font-weight", "bold")
-                .set("font-size", "16px");
+                .set("font-size", "15px");
 
         List<String> lastFiveTransactions = getLastFiveTransactions();
 

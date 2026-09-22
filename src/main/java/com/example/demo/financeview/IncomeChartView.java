@@ -214,7 +214,7 @@ public class IncomeChartView extends VerticalLayout {
 
         pie.getStyle()
                 //.set("width", "300px")
-                .set("height", "250px")
+                .set("height", "230px")
                 .set("width", "300px")
                 .set("border-radius", "50%")
                 .set("background",

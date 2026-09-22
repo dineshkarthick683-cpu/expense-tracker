@@ -211,7 +211,7 @@ public class ExpenseChartView extends VerticalLayout {
         Div pie = new Div();
 
         pie.getStyle()
-                .set("height", "250px")
+                .set("height", "230px")
                 .set("width", "300px")
                 .set("border-radius", "50%")
                 .set("background",

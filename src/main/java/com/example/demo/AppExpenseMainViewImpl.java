@@ -419,7 +419,7 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
                 .set("margin", "10px");
 
         username = new Span("👤 User: " + user.getUsername());
-        username.getStyle().set("font-size", "18px").set("font-weight", "600");
+        username.getStyle().set("font-size", "15px").set("font-weight", "600");
 
         double balance = getBalanceIncomeSalaryForMonthAmount().get(0) - Double.valueOf(populatedMonthlyExpenseAmount());
         // Clamp negative values to 0
@@ -428,21 +428,21 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         }
         budgetLeft = new Span("💰 Budget Left: ₹ " +balance);
         budgetLeft.getStyle()
-                .set("font-size", "18px")
+                .set("font-size", "15px")
                 .set("font-weight", "600")
                 .set("color", "#2E7D32"); // Green
 
 
         todayExpense = new Span("📉 Today Expense: ₹" + populatedTodayExpenseAmount());
-        todayExpense.getStyle().set("font-size", "15px").set("color", "#c62828").set("font-weight", "700");
+        todayExpense.getStyle().set("font-size", "15px").set("color", "#c62828").set("font-weight", "600");
 
         Monthexpense = new Span("📉 Month Expense: ₹" + populatedMonthlyExpenseAmount());
-        Monthexpense.getStyle().set("font-size", "15px").set("color", "#c62828").set("font-weight", "700");
+        Monthexpense.getStyle().set("font-size", "15px").set("color", "#c62828").set("font-weight", "600");
 
         title = new Span("🕒 Recent Txns");
         title.getStyle()
                 .set("font-weight", "bold")
-                .set("font-size", "16px");
+                .set("font-size", "15px");
 
         List<String> lastFiveTransactions = getLastFiveTransactions();
 
