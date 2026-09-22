@@ -156,6 +156,10 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
                         resetBtn,
                         cancelBtn);
 
+        buttonLayout.setSpacing(true);
+        buttonLayout.setPadding(true);
+        buttonLayout.getStyle().set("margin-top", "20px");
+
         buttonLayout.setWidthFull();
         buttonLayout.setJustifyContentMode(
                 FlexComponent.JustifyContentMode.CENTER);
@@ -203,8 +207,8 @@ public class AppIncomeEditMainDialogImpl extends Dialog {
         btnCommon.getStyle().set("box-shadow", "0 4px 10px rgba(0,0,0,0.2)");
         btnCommon.getStyle().set("background-color", "#FFD700"); // golden color
         btnCommon.getStyle().set("color", "black");
-        btnCommon.getStyle().set("flex-direction", "column"); // icon above text
-        btnCommon.getStyle().set("align-items", "center");
-        btnCommon.getStyle().set("justify-content", "center");
+//        btnCommon.getStyle().set("flex-direction", "column"); // icon above text
+//        btnCommon.getStyle().set("align-items", "center");
+//        btnCommon.getStyle().set("justify-content", "center");
     }
 }
