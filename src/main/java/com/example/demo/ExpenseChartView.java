@@ -59,12 +59,26 @@ public class ExpenseChartView extends VerticalLayout {
         chartContainer.setSpacing(true);
         chartContainer.setPadding(false);
 
-        H2 title = new H2("Expense Dashboard");
+        //H2 title = new H2("Expense Dashboard");
+
+        Span title = new Span("Expense Dashboard");
+
+
+        title.getStyle()
+                .set("font-size", "1.5rem !important")   // force override
+                .set("font-weight", "600")
+                .set("background", "linear-gradient(to right, #2a5298, #1e3c72)")
+                .set("color", "white")
+                .set("padding", "0.5rem");
+        title.setWidthFull();
+
 
         startDate.setValue(LocalDate.now().withDayOfMonth(1));
         endDate.setValue(LocalDate.now());
 
         Button loadButton = new Button(VaadinIcon.DATABASE.create());
+        loadButton.getStyle().set("background", "linear-gradient(to right, #4facfe, #00f2fe)");
+        loadButton.getStyle().set("color", "white");
 
         HorizontalLayout emptyLayout2 = new HorizontalLayout(startDate);
         emptyLayout2.setWidthFull();
@@ -197,7 +211,7 @@ public class ExpenseChartView extends VerticalLayout {
         Div pie = new Div();
 
         pie.getStyle()
-                .set("height", "300px")
+                .set("height", "250px")
                 .set("width", "300px")
                 .set("border-radius", "50%")
                 .set("background",
