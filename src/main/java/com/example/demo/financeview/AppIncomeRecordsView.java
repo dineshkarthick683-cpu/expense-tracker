@@ -305,7 +305,7 @@ public class AppIncomeRecordsView extends VerticalLayout {
                 .setAutoWidth(true);
 
         DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
 
         grid.addColumn(Income ->
                         Income.getIncomeDate().format(formatter))
@@ -600,7 +600,7 @@ public class AppIncomeRecordsView extends VerticalLayout {
 
             int y = 730;
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
             Double totalAmount = expenseList.stream().map(AppIncomeMainViewModel::getAmount).filter(Objects::nonNull)
                     .reduce(0.0, Double::sum);
 
