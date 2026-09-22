@@ -12,6 +12,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -167,10 +168,22 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
         buttonLayout.setJustifyContentMode(
                 FlexComponent.JustifyContentMode.CENTER);
 
+        VerticalLayout fieldsLayout =
+                new VerticalLayout(
+                        remarksField,
+                        amountField,
+                        expenseDate);
+
+        fieldsLayout.setSpacing(true);
+        fieldsLayout.setPadding(true);
+        fieldsLayout.getStyle().set("margin-top", "20px");
+
+        fieldsLayout.setWidthFull();
+        fieldsLayout.setJustifyContentMode(
+                FlexComponent.JustifyContentMode.CENTER);
+
         add(
-                remarksField,
-                amountField,
-                expenseDate,
+                fieldsLayout,
                 buttonLayout
         );
     }

@@ -155,10 +155,22 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         buttonLayout.setJustifyContentMode(
                 FlexComponent.JustifyContentMode.CENTER);
 
+        VerticalLayout fieldsLayout =
+                new VerticalLayout(
+                        remarksField,
+                        amountField,
+                        expenseDate);
+
+        fieldsLayout.setSpacing(true);
+        fieldsLayout.setPadding(true);
+        fieldsLayout.getStyle().set("margin-top", "20px");
+
+        fieldsLayout.setWidthFull();
+        fieldsLayout.setJustifyContentMode(
+                FlexComponent.JustifyContentMode.CENTER);
+
         add(
-                remarksField,
-                amountField,
-                expenseDate,
+                fieldsLayout,
                 buttonLayout
         );
     }

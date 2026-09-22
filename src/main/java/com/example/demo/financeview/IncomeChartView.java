@@ -138,8 +138,7 @@ public class IncomeChartView extends VerticalLayout {
         topRow.setWidthFull();
 
         chartContainer.add(
-                topRow,
-                lineChart
+                topRow
         );
     }
 
@@ -202,6 +201,7 @@ public class IncomeChartView extends VerticalLayout {
         pie.getStyle()
                 //.set("width", "300px")
                 .set("height", "200px")
+                .set("width", "200px")
                 .set("border-radius", "50%")
                 .set("background",
                         "conic-gradient(" + gradient + ")");

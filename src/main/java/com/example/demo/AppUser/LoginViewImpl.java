@@ -212,7 +212,7 @@ public class LoginViewImpl extends VerticalLayout {
         resetBtn.addClickListener(event -> {
             usernameField.clear();
             passwordField.clear();
-            delete();
+            //delete();
 
         });
     }
