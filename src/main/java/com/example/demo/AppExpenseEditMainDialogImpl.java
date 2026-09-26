@@ -150,16 +150,17 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
                     expenseMainViewModelSave.setLocation(currentLocation);
 
                     expenseService.save(expenseMainViewModelSave);
+                    SuccessNotification();
+                    remarksField.clear();
+                    amountField.clear();
+                    saveBtn.setEnabled(true);
 
                     // 👉 Call the callback after save
                     if (onSaveCallback != null) {
                         onSaveCallback.run();
                     }
 
-                    SuccessNotification();
-                    remarksField.clear();
-                    amountField.clear();
-                    saveBtn.setEnabled(true);
+
                     //close();
 
                 }else{
