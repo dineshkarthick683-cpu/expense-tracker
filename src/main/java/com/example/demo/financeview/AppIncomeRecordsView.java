@@ -51,6 +51,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import com.vaadin.flow.component.html.Span;
 import java.io.ByteArrayInputStream;
@@ -438,7 +439,11 @@ public class AppIncomeRecordsView extends VerticalLayout {
                             .toList();
 
             List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-            grid.setItems(lstOfDetails);
+            List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+                    .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+                            .reversed())
+                    .collect(Collectors.toList());
+            grid.setItems(sortOrderList);
             getSumOfAmountBasedOnGrid();
         });
 
@@ -450,8 +455,12 @@ public class AppIncomeRecordsView extends VerticalLayout {
 
 
         List<AppIncomeMainViewModel> lstOfDetails = incomeService.getAllIncome().stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
+        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+                        .reversed())
+                .collect(Collectors.toList());
         grid.setItems(
-                lstOfDetails);
+                sortOrderList);
         getSumOfAmountBasedOnGrid();
 
     }
@@ -481,7 +490,11 @@ public class AppIncomeRecordsView extends VerticalLayout {
                         toDateTime);
 
         List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-        grid.setItems(result);
+        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+                        .reversed())
+                .collect(Collectors.toList());
+        grid.setItems(sortOrderList);
         getSumOfAmountBasedOnGrid();
 
     }

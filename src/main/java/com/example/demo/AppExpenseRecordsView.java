@@ -459,7 +459,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
                             .toList();
 
             List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-            grid.setItems(lstOfDetails);
+            List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+                    .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+                            .reversed())
+                    .collect(Collectors.toList());
+            grid.setItems(sortOrderList);
 
 
             //result.stream().filter(p-> p.getExpenseName().startsWith("Salary")).forEach(System.out::println);
@@ -611,8 +615,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
         List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
         List<AppExpenseMainViewModel> lstOfDetails = lstAllExpense.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-
-        grid.setItems(lstOfDetails);
+        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+                        .reversed())
+                .collect(Collectors.toList());
+        grid.setItems(sortOrderList);
         getSumOfAmountBasedOnGrid();
     }
 
@@ -643,8 +650,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
 
         List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-
-        grid.setItems(lstOfDetails);
+        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+                        .reversed())
+                .collect(Collectors.toList());
+        grid.setItems(sortOrderList);
         getSumOfAmountBasedOnGrid();
     }
 

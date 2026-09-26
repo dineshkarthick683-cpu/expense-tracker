@@ -140,16 +140,16 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
 
 
                 if(currentLocation!=null) {
-                    AppExpenseMainViewModel expenseMainViewModelSave = new AppExpenseMainViewModel();
+                    //AppExpenseMainViewModel expenseMainViewModelSave = new AppExpenseMainViewModel();
                     // Save expense with location
-                    expenseMainViewModelSave.setCategory(expenseMainViewModel.getCategory()); // pass from image click
-                    expenseMainViewModelSave.setExpenseName(remarksField.getValue());
-                    expenseMainViewModelSave.setAmount(amountField.getValue());
-                    expenseMainViewModelSave.setUsername(user.getUsername());
-                    expenseMainViewModelSave.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
-                    expenseMainViewModelSave.setLocation(currentLocation);
+                    expenseMainViewModel.setCategory(expenseMainViewModel.getCategory()); // pass from image click
+                    expenseMainViewModel.setExpenseName(remarksField.getValue());
+                    expenseMainViewModel.setAmount(amountField.getValue());
+                    expenseMainViewModel.setUsername(user.getUsername());
+                    expenseMainViewModel.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
+                    expenseMainViewModel.setLocation(currentLocation);
 
-                    expenseService.save(expenseMainViewModelSave);
+                    expenseService.save(expenseMainViewModel);
                     SuccessNotification();
                     remarksField.clear();
                     amountField.clear();
