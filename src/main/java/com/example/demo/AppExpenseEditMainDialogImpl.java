@@ -157,8 +157,10 @@ public class AppExpenseEditMainDialogImpl extends Dialog {
                     }
 
                     SuccessNotification();
+                    remarksField.clear();
+                    amountField.clear();
                     saveBtn.setEnabled(true);
-                    close();
+                    //close();
 
                 }else{
                     errorNotification("please on the location to update expense");

@@ -141,7 +141,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                     expenseService.save(expenseMainViewModelSave);
                     SuccessNotification();
                     saveBtn.setEnabled(true);
-                    close();
+                    //close();
                     ExpenseEvent producerEvent = new ExpenseEvent(
                             expenseMainViewModelSave.getId(),
                             expenseMainViewModelSave.getCategory(),
@@ -154,6 +154,8 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                 }
 
             }
+            remarksField.clear();
+            amountField.clear();
             saveBtn.setEnabled(true);
         });
 
