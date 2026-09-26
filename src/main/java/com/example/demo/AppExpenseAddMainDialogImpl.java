@@ -143,7 +143,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                     saveBtn.setEnabled(true);
                     remarksField.clear();
                     amountField.clear();
-                    
+
                     //close();
                     ExpenseEvent producerEvent = new ExpenseEvent(
                             expenseMainViewModelSave.getId(),
