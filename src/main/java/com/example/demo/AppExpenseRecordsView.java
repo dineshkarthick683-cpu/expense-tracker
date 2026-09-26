@@ -326,6 +326,7 @@ public class AppExpenseRecordsView extends VerticalLayout {
                         expense.getExpenseDate().format(formatter))
                 .setHeader("Date")
                 .setAutoWidth(false)
+                .setSortable(true)
                 .setWidth("180px")
                 .setFlexGrow(0);
 
@@ -459,11 +460,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
                             .toList();
 
             List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-            List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
-                    .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
-                            .reversed())
-                    .collect(Collectors.toList());
-            grid.setItems(sortOrderList);
+//            List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+//                    .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+//                            .reversed())
+//                    .collect(Collectors.toList());
+            grid.setItems(lstOfDetails);
 
 
             //result.stream().filter(p-> p.getExpenseName().startsWith("Salary")).forEach(System.out::println);
@@ -615,11 +616,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
         List<AppExpenseMainViewModel> lstAllExpense = expenseService.getAllExpenses();
         List<AppExpenseMainViewModel> lstOfDetails = lstAllExpense.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
-                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
-                        .reversed())
-                .collect(Collectors.toList());
-        grid.setItems(sortOrderList);
+//        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+//                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+//                        .reversed())
+//                .collect(Collectors.toList());
+        grid.setItems(lstOfDetails);
         getSumOfAmountBasedOnGrid();
     }
 
@@ -650,11 +651,11 @@ public class AppExpenseRecordsView extends VerticalLayout {
 
 
         List<AppExpenseMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
-                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
-                        .reversed())
-                .collect(Collectors.toList());
-        grid.setItems(sortOrderList);
+//        List<AppExpenseMainViewModel> sortOrderList = lstOfDetails.stream()
+//                .sorted(Comparator.comparing(AppExpenseMainViewModel::getExpenseDate)
+//                        .reversed())
+//                .collect(Collectors.toList());
+        grid.setItems(lstOfDetails);
         getSumOfAmountBasedOnGrid();
     }
 

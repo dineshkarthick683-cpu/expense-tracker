@@ -312,6 +312,7 @@ public class AppIncomeRecordsView extends VerticalLayout {
                         Income.getIncomeDate().format(formatter))
                 .setHeader("Date")
                 .setAutoWidth(false)
+                .setSortable(true)
                 .setWidth("180px")
                 .setFlexGrow(0);
 
@@ -439,11 +440,11 @@ public class AppIncomeRecordsView extends VerticalLayout {
                             .toList();
 
             List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-            List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
-                    .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
-                            .reversed())
-                    .collect(Collectors.toList());
-            grid.setItems(sortOrderList);
+//            List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+//                    .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+//                            .reversed())
+//                    .collect(Collectors.toList());
+            grid.setItems(lstOfDetails);
             getSumOfAmountBasedOnGrid();
         });
 
@@ -455,12 +456,12 @@ public class AppIncomeRecordsView extends VerticalLayout {
 
 
         List<AppIncomeMainViewModel> lstOfDetails = incomeService.getAllIncome().stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
-                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
-                        .reversed())
-                .collect(Collectors.toList());
+//        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+//                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+//                        .reversed())
+//                .collect(Collectors.toList());
         grid.setItems(
-                sortOrderList);
+                lstOfDetails);
         getSumOfAmountBasedOnGrid();
 
     }
@@ -490,11 +491,11 @@ public class AppIncomeRecordsView extends VerticalLayout {
                         toDateTime);
 
         List<AppIncomeMainViewModel> lstOfDetails = result.stream().filter(p -> p.getUsername().equals(user.getUsername())).collect(Collectors.toList());
-        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
-                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
-                        .reversed())
-                .collect(Collectors.toList());
-        grid.setItems(sortOrderList);
+//        List<AppIncomeMainViewModel> sortOrderList = lstOfDetails.stream()
+//                .sorted(Comparator.comparing(AppIncomeMainViewModel::getCreated_time)
+//                        .reversed())
+//                .collect(Collectors.toList());
+        grid.setItems(lstOfDetails);
         getSumOfAmountBasedOnGrid();
 
     }
