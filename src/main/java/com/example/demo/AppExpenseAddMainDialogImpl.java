@@ -75,6 +75,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
         amountField.setWidthFull();
 
         expenseDate = new DatePicker("Expense Date");
+        expenseDate.setValue(LocalDateTime.now().toLocalDate());
         expenseDate.setRequired(true);
         expenseDate.setWidthFull();
 
@@ -143,6 +144,7 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                     saveBtn.setEnabled(true);
                     remarksField.clear();
                     amountField.clear();
+                    expenseDate.setValue(LocalDateTime.now().toLocalDate());
 
                     //close();
                     ExpenseEvent producerEvent = new ExpenseEvent(

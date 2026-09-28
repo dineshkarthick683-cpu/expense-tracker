@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Route("addincome")
@@ -61,6 +62,7 @@ public class AppIncomeAddMainDialogImpl extends Dialog {
         amountField.setWidthFull();
 
         incomeDate = new DatePicker("Income Date");
+        incomeDate.setValue(LocalDateTime.now().toLocalDate());
         incomeDate.setRequired(true);
         incomeDate.setWidthFull();
 
