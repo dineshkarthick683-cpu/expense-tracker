@@ -239,21 +239,17 @@ public class NotesRecordsView extends VerticalLayout {
 
                     Button viewBtn = new Button("", VaadinIcon.EYE.create());
 
-                    viewBtn.addClickListener(e -> {
+                    StreamResource resource = new StreamResource(
+                            item.getFilename(),
+                            () -> new ByteArrayInputStream(item.getContent())
+                    );
 
-                        StreamResource resource = new StreamResource(
-                                item.getFilename(),
-                                () -> new ByteArrayInputStream(item.getContent())
-                        );
+                    Anchor viewLink = new Anchor(resource, "");
+                    viewLink.setTarget("_blank");
+                    viewLink.add(viewBtn);
 
-                        Anchor anchor = new Anchor(resource, "Open");
-                        anchor.setTarget("_blank");
-
-                        add(anchor); // attach to UI
-                        anchor.getElement().callJsFunction("click");
-                    });
-
-            HorizontalLayout actions = new HorizontalLayout(viewBtn,deleteBtn);
+                    HorizontalLayout actions =
+                            new HorizontalLayout(viewLink, deleteBtn);
             actions.setWidthFull();
             return actions;
         }).setHeader("Ops")
