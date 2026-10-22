@@ -15,12 +15,30 @@ CMD ["sh", "-c", "java -Dserver.port=$PORT -jar target/*.jar"]
 
 #1. Create Dockerfile in the application root directory.
 
+
+#Render Dashboard
+#    ↓
+#New Web Service
+#    ↓
+#Connect GitHub Account
+#    ↓
+#Render Monitors Your Repository
+
 #2. Dockerfile contains instructions such as:
 #   - Java 21 Base Image
 #   - Copy Application Source Code
 #  - Build JAR File
 #   - Dependencies
-#   - Linux Environment
+#   - Linux Environment most company use linux and light weight easy to start app 1. Linux ✅ (Most Common)
+                                                                                  #
+                                                                                  #Examples:
+                                                                                  #
+                                                                                  #Ubuntu
+                                                                                  #Debian
+                                                                                  #Alpine Linux
+                                                                                  #CentOS
+                                                                                  #Red Hat Enterprise Linux (RHEL)
+                                                                                  #Amazon Linux
 #
 #3. Render reads the Dockerfile and creates a Docker Image.
 #   Docker Image = Packaged Application (App Installation Package)
