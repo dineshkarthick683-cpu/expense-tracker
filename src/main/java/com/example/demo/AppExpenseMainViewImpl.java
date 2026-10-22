@@ -1,11 +1,10 @@
 package com.example.demo;
 
-import com.example.demo.AppUser.AppUserModel;
-import com.example.demo.AppUser.AppUserSerice;
-import com.example.demo.AppUser.LoginViewImpl;
-import com.example.demo.AppUser.UserDetailsView;
+import com.example.demo.AppUser.*;
+import com.example.demo.financeview.AddNotesMainDialogImpl;
 import com.example.demo.financeview.FinanceView;
 import com.example.demo.financeview.IncomeService;
+import com.example.demo.financeview.NotesRecordsView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -40,6 +39,8 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
 
     private IncomeService incomeService;
 
+    private NotesService notesService;
+
 
     Dialog sideDrawer = new Dialog();
     Div card = new Div();
@@ -48,17 +49,22 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
     Span todayExpense = new Span();
     Span Monthexpense = new Span();
     Span title = new Span();
+    Button addPersonalNote = new Button("Click to add notes");
+    Button financeBtn = new Button("Go to Finance View");
+    VerticalLayout addBtnLayout = new VerticalLayout();
     VerticalLayout cardContent = new VerticalLayout();
     AppUserModel user = VaadinSession.getCurrent().getAttribute(AppUserModel.class);
 
     @Autowired
     private CommonUtil commonUtil;
 
-    public AppExpenseMainViewImpl(ExpenseService expenseService,IncomeService incomeService)  {
+    public AppExpenseMainViewImpl(ExpenseService expenseService,IncomeService incomeService,NotesService notesService)  {
 
         this.expenseService = expenseService;
 
         this.incomeService = incomeService;
+
+        this.notesService = notesService;
 
         VaadinSession.getCurrent().setAttribute("financeValue", "Expense");
 
@@ -125,6 +131,12 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         Button VegetableBtnTile = new Button("Vegetable", VaadinIcon.CUTLERY.create());
         Button PharmacyBtnTile = new Button("Pharmacy", VaadinIcon.HOSPITAL.create());
         Button FoodBtnTile = new Button("Food", VaadinIcon.COFFEE.create());
+        Button babyBtn = new Button("Infant", VaadinIcon.SMILEY_O.create());
+        Button petrolBtn = new Button("Petrol", VaadinIcon.CAR.create());
+        Button nonVegBtn = new Button("NonVeg", VaadinIcon.CUTLERY.create());
+        Button milkBtn = new Button("Milk", VaadinIcon.COFFEE.create());
+        Button OnlineBtn = new Button("E-Shop", VaadinIcon.CART.create());
+        Button repairBtn = new Button("Repair", VaadinIcon.TOOLS.create());
 
         HorizontalLayout row1 = new HorizontalLayout(
                 createExpenseRow(giftBtnTile,"Gift"),
@@ -149,8 +161,29 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         );
         row3.setWidthFull();
 
+        HorizontalLayout row4 = new HorizontalLayout(
+                createExpenseRow(babyBtn,"Infant"),
+                createExpenseRow(petrolBtn,"Petrol")
+
+        );
+        row4.setWidthFull();
+
+        HorizontalLayout row5 = new HorizontalLayout(
+                createExpenseRow(nonVegBtn,"NonVeg"),
+                createExpenseRow(milkBtn,"Milk")
+
+        );
+        row5.setWidthFull();
+
+        HorizontalLayout row6 = new HorizontalLayout(
+                createExpenseRow(OnlineBtn,"E-Shop"),
+                createExpenseRow(repairBtn,"Repair")
+
+        );
+        row6.setWidthFull();
+
         VerticalLayout expenseList = new VerticalLayout();
-        expenseList.add(row1,row2,row3);
+        expenseList.add(row1,row2,row3,row4,row5,row6);
         expenseList.setWidthFull();
 
 
@@ -174,14 +207,20 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
                         VaadinIcon.USER.create());
         setBtnComponentStyle(me);
 
+        Button notes =
+                new Button("",
+                        VaadinIcon.FILE_TEXT.create());
+        setBtnComponentStyle(notes);
+
         HorizontalLayout nav = new HorizontalLayout(
                 records,
                 chart,
-                me
+                me,
+                notes
         );
 
 
-        nav.expand(records, chart, me);
+        nav.expand(records, chart, me,notes);
         nav.setWidthFull();
         add(
                 headerLayout,
@@ -220,6 +259,8 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
          * Version : 1.0
          */
         chart.addClickListener(event -> UI.getCurrent().navigate(ExpenseChartView.class));
+
+        notes.addClickListener(event -> UI.getCurrent().navigate(NotesRecordsView.class));
 
         /**
          * User Details Navigation Button
@@ -472,7 +513,6 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
         }
 
         // 👉 Add navigation button
-        Button financeBtn = new Button("Go to Finance View");
         financeBtn.getStyle()
                 //.set("margin-top", "15px")
                 .set("background-color", "#4CAF50")
@@ -486,8 +526,27 @@ public class AppExpenseMainViewImpl extends VerticalLayout {
             sideDrawer.close(); // optional: close drawer after navigation
         });
 
+
+
+        addBtnLayout.add(financeBtn,addPersonalNote);
+        addBtnLayout.setWidthFull();
+
         financeBtn.setWidthFull();
-        cardContent.add(financeBtn);
+        addPersonalNote.setWidthFull();
+        cardContent.add(addBtnLayout);
+
+
+
+//        addPersonalNote.addClickListener(e -> {
+//            UI.getCurrent().navigate(AddNotesMainDialogImpl.class);
+//            sideDrawer.close(); // optional: close drawer after navigation
+//        });
+
+        addPersonalNote.addClickListener(event -> {
+            AddNotesMainDialogImpl dialog =
+                    new AddNotesMainDialogImpl(notesService);
+            dialog.open();
+        });
 
 
         card.add(cardContent);

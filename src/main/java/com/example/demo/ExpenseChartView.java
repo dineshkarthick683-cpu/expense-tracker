@@ -107,7 +107,7 @@ public class ExpenseChartView extends VerticalLayout {
         backBtn.addClickListener(event -> {
 
 
-            UI.getCurrent().navigate(AppIncomeMainViewImpl.class);
+            UI.getCurrent().navigate(AppExpenseMainViewImpl.class);
 
         });
     }

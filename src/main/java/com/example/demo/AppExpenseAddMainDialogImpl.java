@@ -140,11 +140,25 @@ public class AppExpenseAddMainDialogImpl extends Dialog {
                     expenseMainViewModelSave.setExpenseDate(expenseDate.getValue().atTime(LocalTime.now()));
                     expenseMainViewModelSave.setLocation(currentLocation);
                     expenseService.save(expenseMainViewModelSave);
+
+
+
+
                     SuccessNotification();
                     saveBtn.setEnabled(true);
                     remarksField.clear();
                     amountField.clear();
                     expenseDate.setValue(LocalDateTime.now().toLocalDate());
+
+                    String upiUrl =
+                            "upi://pay?pa=kalpanaprakash96@okicici"
+                                    + "&pn=Karthick"
+                                    + "&am=" + amountField.getValue()
+                                    + "&cu=INR";
+                    System.out.println("url-->"+upiUrl);
+                    getUI().ifPresent(ui ->
+                            ui.getPage().executeJs(
+                                    "window.location.href=$0", upiUrl));
 
                     //close();
                     ExpenseEvent producerEvent = new ExpenseEvent(

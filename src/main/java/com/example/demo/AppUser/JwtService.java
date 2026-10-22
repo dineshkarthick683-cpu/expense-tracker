@@ -43,6 +43,22 @@ public class JwtService {
 //    Ensures nobody can tamper with the payload.
 //    Example: dBjftJeZ4CVP-mB92K27uhbUJU1p...
 
+//    Login
+//  ↓
+//    Generate JWT
+//  ↓
+//    Store in Session
+//  ↓
+//    Validate JWT
+//  ↓
+//    Allow User
+
+
+//    In our project, we use JWT for authentication and authorization. After successful login, the user's role is validated from the JWT token.
+//    Based on the role, we control access to UI screens and functionalities. For example, Operators have access to all screens, Control Room users have view-only access,
+//    and Supervisors have access to specific master data screens based on machine assignments.
+//    We implemented role-based access control within the application UI rather than using Spring Security annotations such as @PreAuthorize.
+
     public String generateToken(String username,String role) {
         return Jwts.builder()
                 .setSubject(username)
@@ -58,7 +74,7 @@ public class JwtService {
             return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody().get("role",String.class);
     }
 
-    //using getBody fetch get subject
+    //using getBody fetch get subject means user name
     public boolean validateToken(String token, String username) {
         try {
             String tokenUser = Jwts.parserBuilder()

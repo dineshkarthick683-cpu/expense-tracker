@@ -14,7 +14,8 @@ public class ExpenseProducer {
 
     public void publishExpense(ExpenseEvent expEvent) {
 
-        kafkaTemplate.send("expense-created", expEvent);
+        kafkaTemplate.send("expense-created",3,null, expEvent);
+
     }
 
 }
