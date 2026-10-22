@@ -239,8 +239,10 @@ public class NotesRecordsView extends VerticalLayout {
 
                     Button viewBtn = new Button("", VaadinIcon.EYE.create());
 
+
+
                     StreamResource resource = new StreamResource(
-                            item.getFilename(),
+                            item.getNotename(),
                             () -> new ByteArrayInputStream(item.getContent())
                     );
 
